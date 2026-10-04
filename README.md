@@ -105,7 +105,7 @@ make those features work.
 - **Open source projects are free**, whether commercial or non-commercial.
 - **Hobby projects are free**, including closed-source hobby projects.
 - For **closed-source commercial use**, contact
-  [nativeui@xtsoftwarelabs.com](mailto:nativeui@xtsoftwarelabs.com) to get a license.
+  [nativeboat@xtsoftwarelabs.com](mailto:nativeboat@xtsoftwarelabs.com) to get a license.
 
 See [LICENSE.md](LICENSE.md) for the usage policy.
 

@@ -7,7 +7,7 @@ NativeBoat is also free to use for hobby projects, including closed-source
 hobby projects.
 
 For closed-source commercial use, contact
-[nativeui@xtsoftwarelabs.com](mailto:nativeui@xtsoftwarelabs.com) to get a license.
+[nativeboat@xtsoftwarelabs.com](mailto:nativeboat@xtsoftwarelabs.com) to get a license.
 
 This policy applies to the NativeBoat compiler and runtime distributed in this
 repository's releases. It does not change the licenses of your application or
