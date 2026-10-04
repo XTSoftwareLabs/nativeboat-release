@@ -13,12 +13,12 @@ Set-StrictMode -Version Latest
 
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $binaryRoot = (Resolve-Path -LiteralPath $BinaryDirectory).Path
-$compiler = Join-Path $binaryRoot 'nativeui.exe'
-$runtime = Join-Path $binaryRoot 'nativeui-runtime.exe'
+$compiler = Join-Path $binaryRoot 'nativeboat.exe'
+$runtime = Join-Path $binaryRoot 'nativeboat-runtime.exe'
 
 foreach ($file in @($compiler, $runtime)) {
     if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
-        throw "Missing $file. Build both nativeui-cli and nativeui-runtime before packaging."
+        throw "Missing $file. Build both nativeboat-cli and nativeboat-runtime before packaging."
     }
 }
 
@@ -26,7 +26,7 @@ $compilerVersion = & $compiler --version
 if ($LASTEXITCODE -ne 0) {
     throw 'Could not read the compiler version.'
 }
-if (($compilerVersion | Out-String).Trim() -ne "nativeui $Version") {
+if (($compilerVersion | Out-String).Trim() -ne "nativeboat $Version") {
     throw "Compiler reports '$compilerVersion', but the requested release is $Version."
 }
 
@@ -35,7 +35,7 @@ if (Test-Path -LiteralPath $releaseDirectory) {
     throw "Release folder already exists: $releaseDirectory. Inspect it before packaging again."
 }
 
-$packageName = "nativeui-$Version-windows-x64"
+$packageName = "nativeboat-$Version-windows-x64"
 $packageDirectory = Join-Path $releaseDirectory $packageName
 $archive = Join-Path $releaseDirectory "$packageName.zip"
 New-Item -ItemType Directory -Path $packageDirectory | Out-Null
