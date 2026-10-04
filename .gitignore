@@ -1,0 +1,11 @@
+# Release assets belong in GitHub Releases.
+/artifacts/
+*.exe
+*.dll
+*.zip
+*.pdb
+
+# Local files
+/scratch/
+Thumbs.db
+.DS_Store
