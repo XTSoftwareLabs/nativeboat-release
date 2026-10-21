@@ -12,9 +12,8 @@ the same repository.
 
 1. Download `nativeboat-<version>-windows-x64.zip` from the
    [releases page](https://github.com/XTSoftwareLabs/nativeboat-release/releases).
-2. Extract it into a folder such as `C:\Tools\nativeboat`. Keep its contents
-   together: `nativeboat.exe` uses the `toolchain` folder next to it.
-3. Optionally add that folder to your user `PATH` and open a new terminal.
+2. Extract it into a folder such as `C:\Tools\nativeboat`.
+3. Add that folder to your user `PATH` and open a new terminal.
 
 Check the installation:
 
@@ -28,8 +27,7 @@ nativeboat --version
   applications have the same requirement.
 - Node.js and your project's package manager, to install the project's
   dependencies.
-- Any tools your project's own build scripts use, for example to build a
-  helper program the application starts.
+- Any tools your project's own build scripts use.
 
 ## Compile an application
 
@@ -41,7 +39,7 @@ nativeboat build        # writes dist\<productName>.exe
 dist\<productName>.exe
 ```
 
-See [Getting started](docs/getting-started.md) for all commands and options.
+See [Getting started](docs/getting-started.md) for more.
 
 ## License
 
@@ -51,7 +49,4 @@ commercial use needs a license: contact
 [nativeboat@xtsoftwarelabs.com](mailto:nativeboat@xtsoftwarelabs.com). See
 [LICENSE.md](LICENSE.md) for the terms.
 
-NativeBoat includes third-party software under its own licenses; see
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and
-`THIRD-PARTY-LICENSES.txt`. Applications built with NativeBoat contain the
-notices of the third-party code in them.
+Third-party software notices: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
