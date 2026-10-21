@@ -1,80 +1,57 @@
 # Publishing a release
 
-The compiler source is maintained in `C:\Workspace\nativeui`. The
-`nativeboat-release` repository holds the download instructions, usage policy
-and release packaging script.
-There is no automated build or publishing workflow here.
+The compiler source is in the `nativeui` repository; its `release` folder holds
+the files of this repository.
 
-## Build and check
+## Build and package
 
-In the source repository, set the release version in `Cargo.toml`, then run
-the source repository's checks and build both programs from the same checkout:
+In the source repository, set the version in `Cargo.toml` (`[workspace.package]`)
+and add its section to `release/CHANGELOG.md`. Then:
 
 ```powershell
 cd C:\Workspace\nativeui
-cargo build --release -p nativeboat-cli -p nativeboat-runtime
-.\target\release\nativeboat.exe --version
+.\scripts\build-release.ps1
 ```
 
-Before publishing, compile a representative Electron project with those
-binaries and check the resulting application's behavior. Check whether the
-release needs any additional third-party notices and include them with the
-download.
+This builds `nativeboat.exe`, packages its toolchain, refreshes
+`release\THIRD-PARTY-LICENSES.txt` and `release\LICENSE.md`, and writes
+`nativeboat-<version>-windows-x64.zip` with `SHA256SUMS.txt` into
+`target\release-package\<version>`. It fails if a dependency's license needs
+review.
 
-## Package
+Copy the `release` folder's files into this repository and commit them.
 
-From this repository:
+Before publishing, extract the ZIP into a fresh folder, run
+`nativeboat --version`, and build and run a representative Electron project
+with it.
+
+To package binaries built elsewhere from this repository:
 
 ```powershell
-cd C:\Workspace\nativeuirelease
-.\scripts\prepare-release.ps1 -Version 0.1.0
+.\scripts\prepare-release.ps1 -Version 0.1.0-alpha.1 -BinaryDirectory C:\Builds\nativeboat
 ```
 
-Replace `0.1.0` with the version being released. The script checks the compiler
-version and packages these files:
+The binary folder holds `nativeboat.exe` and its `toolchain` folder.
 
-- `nativeboat.exe`
-- `nativeboat-runtime.exe`
-- `README.md`
-- `LICENSE.md`
-
-It writes a ZIP and `SHA256SUMS.txt` into `artifacts\0.1.0`. The unpacked
-package is also kept there for inspection. It refuses to overwrite an existing
-release folder.
-
-To package binaries from a different build directory:
-
-```powershell
-.\scripts\prepare-release.ps1 -Version 0.1.0 -BinaryDirectory C:\Builds\nativeboat
-```
-
-The script packages existing binaries. It does not build, tag or upload anything.
-
-## Upload manually
+## Upload
 
 1. Open [GitHub Releases](https://github.com/XTSoftwareLabs/nativeboat-release/releases)
    and choose **Draft a new release**.
-2. Create a tag such as `v0.1.0` and use `NativeBoat 0.1.0` as the title.
-3. Describe the changes, compatibility limits and any upgrade instructions.
-4. Upload `nativeboat-0.1.0-windows-x64.zip` and `SHA256SUMS.txt` from
-   `artifacts\0.1.0`.
-5. Mark preview versions as prereleases. For a stable release, set it as the
-   latest release, then publish it.
-
-If you upload executables separately, upload both `nativeboat.exe` and
-`nativeboat-runtime.exe` from the same build. The compiler alone cannot build
-applications with its default settings.
+2. Create a tag such as `v0.1.0-alpha.1` and use `NativeBoat 0.1.0-alpha.1` as
+   the title.
+3. Use the version's section of `CHANGELOG.md` as the description.
+4. Upload `nativeboat-<version>-windows-x64.zip` and `SHA256SUMS.txt`.
+5. Mark alpha, beta and preview versions as prereleases. For a stable
+   release, set it as the latest release. Then publish it.
 
 ## Verify the download
 
-Download the published ZIP and checksum file. Compare the ZIP's SHA-256 with
-the entry in `SHA256SUMS.txt`:
+Download the published ZIP and `SHA256SUMS.txt` and compare the hash:
 
 ```powershell
-Get-FileHash .\nativeboat-0.1.0-windows-x64.zip -Algorithm SHA256
+Get-FileHash .\nativeboat-0.1.0-alpha.1-windows-x64.zip -Algorithm SHA256
 Get-Content .\SHA256SUMS.txt
 ```
 
-Extract the ZIP into a fresh folder, run `nativeboat.exe --version`, then use
-that copy to analyze and build an application. Keep the compiler and runtime
-together when checking the download.
+Extract it into a fresh folder, run `nativeboat.exe --version`, then build an
+application with that copy.
