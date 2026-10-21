@@ -26,7 +26,7 @@ nativeboat analyze
 
 Reports which Electron, Node.js and web features the project uses and how
 well each is supported, with where each is used. Add `--json` for a JSON
-report.
+report. [Compatibility](compatibility.md) lists the features and their support levels.
 
 ## Build
 
