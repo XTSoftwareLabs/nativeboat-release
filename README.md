@@ -39,7 +39,8 @@ nativeboat build        # writes dist\<productName>.exe
 dist\<productName>.exe
 ```
 
-See [Getting started](docs/getting-started.md) for more.
+See [Getting started](docs/getting-started.md) for more, and
+[Compatibility](docs/compatibility.md) for what is supported.
 
 ## License
 
