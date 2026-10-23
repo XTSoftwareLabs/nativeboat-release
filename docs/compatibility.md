@@ -46,18 +46,18 @@ It does not build for macOS or Linux.
 
 | API | Support | Notes |
 | --- | --- | --- |
-| `app`, `BrowserWindow`, `webContents` | Supported | |
+| `app`, `BrowserWindow` and its `webContents` | Supported | |
 | `ipcMain`, `ipcRenderer`, `contextBridge` | Supported | |
-| `dialog`, `Menu`, `MenuItem`, `Tray`, `Notification` | Supported | |
-| `clipboard`, `shell`, `globalShortcut`, `nativeImage` | Supported | |
-| `nativeTheme`, `screen`, `powerMonitor`, `powerSaveBlocker` | Supported | |
-| `safeStorage`, `webUtils` | Supported | |
+| `dialog`, `Menu`, `MenuItem` | Supported | |
+| `clipboard`, `shell`, `nativeImage` | Supported | |
+| `nativeTheme`, `screen`, `webUtils` | Supported | |
 | `webFrame` | Partial | zoom only (`get`/`setZoomFactor`, `get`/`setZoomLevel`); spell checking and other methods are not available |
 | `net` | Partial | `net.fetch` only |
-| `session`, `protocol` | Partial | the common request APIs only |
-| `systemPreferences` | Partial | a subset of the API |
+| `session` | Partial | the common request APIs only |
 | `crashReporter` | Partial | `start` writes local crash dumps; reports are not uploaded |
-| `autoUpdater` | Partial | checking for updates is not supported |
+| `Tray`, `Notification`, `globalShortcut`, `protocol` | Not supported | |
+| `powerMonitor`, `powerSaveBlocker`, `safeStorage`, `systemPreferences`, `autoUpdater` | Not supported | |
+| The `webContents` module (`getAllWebContents`, `fromId`...) | Not supported | use each window's `webContents` |
 | Any other module | Not supported | |
 
 ## Node.js modules
@@ -66,17 +66,16 @@ It does not build for macOS or Linux.
 | --- | --- | --- |
 | `fs`, `path`, `os`, `events`, `buffer`, `util`, `url` | Supported | |
 | `process`, `assert`, `querystring`, `string_decoder` | Supported | |
-| `timers`, `console`, `readline`, `stream` | Supported | |
-| `child_process` | Partial | `spawn`, `exec`, `execFile` and their sync forms, `ChildProcess`; `fork` is not available, as there is no Node.js executable |
-| `net` | Partial | `Server`, `Socket`, `connect`, `createConnection`, `createServer`, `isIP` functions |
+| `timers`, `stream` | Supported | |
+| `child_process` | Partial | `spawn`, `exec`, `execFile`, `execSync`, `execFileSync`; `fork` is not available, as there is no Node.js executable |
 | `http`, `https` | Partial | `request`, `get`, `createServer`, `Agent`, `Server` and the request and response classes |
 | `crypto` | Partial | `createHash`, `createHmac`, `randomBytes`, `randomUUID` |
-| `dns` | Partial | `lookup` and `promises` |
-| `module` | Partial | `createRequire`, `builtinModules`, `isBuiltin` |
-| `perf_hooks` | Partial | a subset of the module |
+| `module` | Partial | `createRequire` only |
+| `async_hooks` | Partial | `AsyncResource` only |
 | `zlib` | Partial | deflate and gzip; brotli is not available |
 | `constants` | Partial | filesystem and Windows constants; OpenSSL constants are not available |
 | `tty` | Partial | `isatty` only; terminal streams are not available |
+| `net`, `tls`, `http2`, `dns`, `readline`, `perf_hooks` | Not supported | |
 | Any other module, such as `worker_threads`, `vm` or `cluster` | Not supported | |
 
 ### Native addons
