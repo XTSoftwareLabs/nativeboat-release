@@ -1,6 +1,7 @@
 # Compatibility
 
-What NativeBoat supports in an Electron application, in three levels:
+What NativeBoat 0.1.0-alpha.2 supports in an Electron application, in three
+levels:
 
 - **Supported**: works as in Electron.
 - **Partial**: works with the limits given.
@@ -22,7 +23,8 @@ It does not build for macOS or Linux.
 | Electron Forge with the Vite plugin | Supported | |
 | electron-builder configuration | Supported | app metadata, `files`, `extraResources`, `extraFiles`, output folder |
 | npm, pnpm, Yarn, Bun | Supported | |
-| React, Vue | Supported | |
+| Vue | Supported | |
+| React | Not supported | JSX and React's CommonJS development build are not compiled yet |
 | Webpack | Partial | sources are compiled directly; custom loaders are not applied |
 | Svelte, Preact, Solid | Partial | runs on the native DOM; not yet validated |
 | jQuery | Partial | layout queries are approximate |
@@ -63,11 +65,12 @@ It does not build for macOS or Linux.
 | Module | Support | Notes |
 | --- | --- | --- |
 | `fs`, `path`, `os`, `events`, `buffer`, `util`, `url` | Supported | |
-| `crypto`, `process`, `assert`, `querystring`, `string_decoder` | Supported | |
+| `process`, `assert`, `querystring`, `string_decoder` | Supported | |
 | `timers`, `console`, `readline`, `stream` | Supported | |
 | `child_process` | Partial | `spawn`, `exec`, `execFile` and their sync forms, `ChildProcess`; `fork` is not available, as there is no Node.js executable |
 | `net` | Partial | `Server`, `Socket`, `connect`, `createConnection`, `createServer`, `isIP` functions |
 | `http`, `https` | Partial | `request`, `get`, `createServer`, `Agent`, `Server` and the request and response classes |
+| `crypto` | Partial | `createHash`, `createHmac`, `randomBytes`, `randomUUID` |
 | `dns` | Partial | `lookup` and `promises` |
 | `module` | Partial | `createRequire`, `builtinModules`, `isBuiltin` |
 | `perf_hooks` | Partial | a subset of the module |
@@ -94,16 +97,16 @@ implemented natively, so they work without their addon:
 | --- | --- | --- |
 | DOM, events, `localStorage`, `sessionStorage` | Supported | |
 | `WebSocket` | Supported | |
-| `ResizeObserver`, `MutationObserver` | Supported | |
+| `ResizeObserver`, `MutationObserver`, `IntersectionObserver` | Supported | |
+| HTML drag and drop | Supported | drags inside the app, to and from other apps, and files dropped from Windows |
+| Custom drag images (`setDragImage`) | Partial | drags show the platform's image |
 | Canvas 2D | Supported | see the limits below |
 | `fetch` | Partial | local files and HTTP(S); no CORS or caching |
 | `XMLHttpRequest` | Partial | asynchronous requests only |
-| `IntersectionObserver` | Partial | visibility is reported at layout time |
-| HTML drag and drop | Partial | drags inside the app and files dropped from Windows; dragging out to other apps, virtual files and custom drag images are not available |
 | `window.open` | Partial | opens a new native window or the default browser |
 | Clipboard API | Partial | text only |
 | Web notifications | Partial | shown in the notification area; clicks are not reported |
-| `document.execCommand` | Partial | `copy`, `cut`, `paste`, `undo`, `redo`, `selectAll`, `insertText`, `insertParagraph`, `insertLineBreak`, `delete`, `forwardDelete` only |
+| `document.execCommand` | Partial | `copy`, `cut`, `paste`, `undo`, `redo`, `selectAll`, `insertText`, `insertParagraph`, `insertLineBreak`, `delete` and `forwardDelete` are supported; other commands are not available |
 | WebGL | Not supported | |
 | Web Workers, Service Workers | Not supported | scripts run on the UI thread only |
 | IndexedDB | Not supported | use `localStorage` or the file system |
@@ -122,9 +125,10 @@ conic gradients draw as linear gradients, and `isPointInPath` and
 | Ordinary elements | Supported | |
 | Form controls | Supported | |
 | `canvas` | Supported | |
-| SVG | Partial | shapes, paths, text, markers and `use` are drawn; gradients, patterns, clip paths, masks, filters, images, text on a path and SVG animations are not |
-| Tables | Partial | laid out with a grid approximation |
-| `dialog`, `details`, `summary` | Partial | basic behavior only |
+| Tables, including captions | Supported | |
+| `details`, `summary` | Supported | |
+| SVG | Partial | shapes, paths, text, markers, `use` and dashed strokes are drawn; gradients, patterns, clip paths, masks, filters, images, text on a path and SVG animations are not |
+| `dialog` | Partial | `show()` and `close()` work; `showModal()` opens the dialog in place, without the top layer, a backdrop or making the rest of the page inert |
 | `iframe`, `webview` | Not supported | |
 | `video`, `audio` | Not supported | |
 | `object`, `embed` | Not supported | |
@@ -133,27 +137,32 @@ conic gradients draw as linear gradients, and `isPointInPath` and
 
 | Feature | Support | Notes |
 | --- | --- | --- |
-| Selectors, cascade, custom properties | Supported | including `:is()`, `:where()`, `:not()`, `:has()`, `:nth-*()`, state and form pseudo-classes, `::before`, `::after`, `::placeholder`, `::selection` || Flexbox, Grid, `position: sticky` | Supported | |
+| Selectors, cascade, custom properties | Supported | including `:is()`, `:where()`, `:not()`, `:has()`, `:nth-*()`, state and form pseudo-classes, `::before`, `::after`, `::marker`, `::placeholder`, `::selection` |
+| Flexbox, Grid, `position: sticky` | Supported | |
+| Floats | Supported | |
+| Tables (`display: table`) | Supported | |
 | `@media`, `@supports`, `@import` | Supported | |
 | `box-shadow` | Supported | |
 | `filter` | Supported | native controls inside a filtered element are drawn unfiltered |
+| `backdrop-filter` | Supported | |
+| Transforms | Supported | |
+| Transitions, `@keyframes` animations | Supported | |
+| `clip-path` | Supported | shapes, boxes, `path()` and the document's SVG `<clipPath>` elements; see the limit below |
+| Masks (`mask`, `mask-image` and the other `mask-*` properties, also with `-webkit-`) | Supported | images, SVG images and gradients; see the limit below |
+| `font-variant-numeric`, `font-feature-settings` | Supported | |
 | Scrollbar styling (`::-webkit-scrollbar` parts, `scrollbar-color`, `scrollbar-width`) | Supported | background images in scrollbar parts are not drawn |
 | Linear gradients | Supported | one opaque layer with an angle or side and increasing percentage stops |
 | Other gradients | Partial | corner directions, transparent stops, length or hard stops, repeating and radial gradients and multiple layers are approximate |
-| Transforms | Partial | native controls and scroll areas do not rotate or scale |
-| Transitions | Partial | `::before` and `::after` change at once |
-| Floats | Partial | text beside a float does not widen below its end |
-| `display: table` | Partial | laid out with a grid approximation |
+| Right-to-left text (`direction`, `unicode-bidi`, `dir`) | Partial | text, lines, carets and selections follow the direction; grid columns, block margins, list markers and scrollbars keep their left-to-right sides |
+| `clip-path: url(...)` to another document | Partial | does not clip |
+| `mask` referencing an SVG `<mask>` element | Partial | does not mask |
 | `display: contents` | Partial | treated as a normal box |
-| `backdrop-filter` | Partial | only content in the same scrolling area is filtered |
 | `@font-face` | Partial | installed system fonts are used |
 | `@layer` | Partial | layers are flattened in source order |
 | `text-shadow` | Partial | not drawn |
 | `overflow-anchor` | Partial | scroll positions are not adjusted when content above changes |
 | Unknown properties | Partial | ignored |
-| `@keyframes` animations | Partial | parsed, but animations do not run |
 | Other pseudo-classes, such as `:lang()`, `:dir()`, `:visited`, `:target` | Not supported | they never match |
-| `clip-path`, masks | Not supported | |
 | `mix-blend-mode` other than `normal` | Not supported | |
 | `filter: url(...)` | Not supported | |
 | Multi-column layout | Not supported | |
@@ -161,6 +170,8 @@ conic gradients draw as linear gradients, and `isPointInPath` and
 
 ## Known differences
 
-- Text uses ClearType everywhere. Electron may draw some text in grayscale.
+- Text uses ClearType, except in scrolling areas that Chromium draws as
+  layers of their own. Electron may draw text in some other layers in
+  grayscale.
 - Box positions are rounded to whole CSS pixels, so a click within half a pixel
   of a line's edge can land on the next line.
