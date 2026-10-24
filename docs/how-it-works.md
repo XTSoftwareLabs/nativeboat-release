@@ -50,7 +50,7 @@ translating before the app ever runs, like a C++ or Rust compiler:
 2. Read and resolve it. Parse each module and work out what every name refers
    to, once, instead of looking it up while the app runs.
 3. Generate native code. Turn each JavaScript function into a native
-   function that keeps JavaScript's behavior.
+   function that keeps JavaScript's behavior. In current version, Rust is used as the native code.
 4. Build the executable. Compile and link that code with the toolchain that
    ships with NativeBoat, together with a small runtime for memory, the event
    loop and built-ins like `Array` and `Promise`.
@@ -82,7 +82,7 @@ same results, no browser runtime underneath.
 ### 3. NativeBoat draws the pages itself
 
 At build time, the HTML of each window and its stylesheets (CSS files, Vue
-component styles, Tailwind output) are processed and packaged with the app.
+component styles, Tailwind output) are processed and packaged with the app. In most parts, it leverages the Windows GDI+ to draw the UI.
 
 When the app runs, page scripts use the normal browser APIs (`document`,
 elements, events), and each change to the page goes through four steps:
