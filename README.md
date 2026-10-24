@@ -41,6 +41,8 @@ dist\<productName>.exe
 
 See [Getting started](docs/getting-started.md) for more, and
 [Compatibility](docs/compatibility.md) for what is supported.
+[How NativeBoat works](docs/how-it-works.md) explains how it builds an
+application.
 
 ## License
 
