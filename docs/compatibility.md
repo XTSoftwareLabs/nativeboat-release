@@ -1,6 +1,6 @@
 # Compatibility
 
-What NativeBoat 0.1.0-alpha.2 supports in an Electron application, in three
+What NativeBoat 0.1.0-alpha.3 supports in an Electron application, in three
 levels:
 
 - **Supported**: works as in Electron.
@@ -21,10 +21,11 @@ It does not build for macOS or Linux.
 | Plain Electron, JavaScript and TypeScript (`tsc`) | Supported | |
 | electron-vite, vite-plugin-electron, Vite | Supported | |
 | Electron Forge with the Vite plugin | Supported | |
-| electron-builder configuration | Supported | app metadata, `files`, `extraResources`, `extraFiles`, output folder |
+| electron-builder configuration | Supported | app metadata, `files`, `extraResources`, `extraFiles`, output folder; in `package.json`, YAML, JSON, JavaScript or TypeScript files |
 | npm, pnpm, Yarn, Bun | Supported | |
 | Vue | Supported | |
-| React | Not supported | JSX and React's CommonJS development build are not compiled yet |
+| Tailwind CSS 4 (`@tailwindcss/vite`) | Supported | |
+| React | Partial | runs on the native DOM; validated on small applications only |
 | Webpack | Partial | sources are compiled directly; custom loaders are not applied |
 | Svelte, Preact, Solid | Partial | runs on the native DOM; not yet validated |
 | jQuery | Partial | layout queries are approximate |
@@ -36,8 +37,9 @@ It does not build for macOS or Linux.
 | Feature | Support | Notes |
 | --- | --- | --- |
 | Modern JavaScript and TypeScript | Supported | |
+| JSX and TSX | Supported | React's automatic runtime or the factory the TypeScript configuration names |
 | TypeScript `experimentalDecorators` | Supported | |
-| Dynamic `require` | Partial | only modules known at build time are included |
+| Dynamic `require` | Partial | only modules known at build time are included; others throw `MODULE_NOT_FOUND` when they run |
 | Standard decorators | Not supported | only TypeScript's `experimentalDecorators` are compiled |
 | Top-level `await` | Not supported | modules are evaluated synchronously |
 | Remote scripts | Not supported | scripts must be part of the application |
@@ -49,13 +51,16 @@ It does not build for macOS or Linux.
 | `app`, `BrowserWindow` and its `webContents` | Supported | |
 | `ipcMain`, `ipcRenderer`, `contextBridge` | Supported | |
 | `dialog`, `Menu`, `MenuItem` | Supported | |
-| `clipboard`, `shell`, `nativeImage` | Supported | |
+| `clipboard`, `shell` | Supported | |
+| `Tray`, `globalShortcut` | Supported | |
 | `nativeTheme`, `screen`, `webUtils` | Supported | |
 | `webFrame` | Partial | zoom only (`get`/`setZoomFactor`, `get`/`setZoomLevel`); spell checking and other methods are not available |
+| `nativeImage` | Partial | PNG images, bitmaps and data URLs; JPEG, ICO, resizing and cropping are not available |
+| `Notification` | Partial | shown as notification area balloons, which Windows shows as banners; actions, replies and urgency are not available |
+| `protocol` | Partial | `registerSchemesAsPrivileged` only |
 | `net` | Partial | `net.fetch` only |
 | `session` | Partial | the common request APIs only |
 | `crashReporter` | Partial | `start` writes local crash dumps; reports are not uploaded |
-| `Tray`, `Notification`, `globalShortcut`, `protocol` | Not supported | |
 | `powerMonitor`, `powerSaveBlocker`, `safeStorage`, `systemPreferences`, `autoUpdater` | Not supported | |
 | The `webContents` module (`getAllWebContents`, `fromId`...) | Not supported | use each window's `webContents` |
 | Any other module | Not supported | |
@@ -66,16 +71,20 @@ It does not build for macOS or Linux.
 | --- | --- | --- |
 | `fs`, `path`, `os`, `events`, `buffer`, `util`, `url` | Supported | |
 | `process`, `assert`, `querystring`, `string_decoder` | Supported | |
-| `timers`, `stream` | Supported | |
+| `timers`, `stream`, `stream/web`, `readline` | Supported | |
+| `http` | Supported | |
 | `child_process` | Partial | `spawn`, `exec`, `execFile`, `execSync`, `execFileSync`; `fork` is not available, as there is no Node.js executable |
-| `http`, `https` | Partial | `request`, `get`, `createServer`, `Agent`, `Server` and the request and response classes |
+| `https` | Partial | `request` and `get`; response bodies arrive whole; servers and custom agents are not available |
+| `net` | Partial | TCP sockets and servers; named pipes are not available |
+| `tls` | Partial | constants and classes load; secure connections and servers are not available |
+| `http2` | Partial | constants and settings helpers load; sessions and servers are not available |
 | `crypto` | Partial | `createHash`, `createHmac`, `randomBytes`, `randomUUID` |
 | `module` | Partial | `createRequire` only |
-| `async_hooks` | Partial | `AsyncResource` only |
-| `zlib` | Partial | deflate and gzip; brotli is not available |
+| `async_hooks` | Partial | `AsyncLocalStorage` and `AsyncResource` |
+| `zlib` | Partial | deflate and gzip; brotli is not available; the stream classes write their output when the input ends |
 | `constants` | Partial | filesystem and Windows constants; OpenSSL constants are not available |
 | `tty` | Partial | `isatty` only; terminal streams are not available |
-| `net`, `tls`, `http2`, `dns`, `readline`, `perf_hooks` | Not supported | |
+| `dns`, `perf_hooks` | Not supported | |
 | Any other module, such as `worker_threads`, `vm` or `cluster` | Not supported | |
 
 ### Native addons
@@ -88,6 +97,7 @@ implemented natively, so they work without their addon:
 | `keytar` | Supported | uses Windows Credential Manager, compatible with keytar's storage |
 | `native-keymap` | Supported | |
 | `ced` | Supported | |
+| `clip-filepaths` | Supported | file lists are read from and written to the Windows clipboard as Explorer copies them |
 | Other addon packages, such as `better-sqlite3`, `sqlite3`, `node-pty`, `serialport`, `sharp`, `canvas`, `bcrypt`, `argon2`, `leveldown`, `nodegit`, `realm`, `usb`, `node-hid`, `robotjs`, `ffi-napi` | Not supported | |
 
 ## Web APIs
@@ -140,7 +150,8 @@ conic gradients draw as linear gradients, and `isPointInPath` and
 | Flexbox, Grid, `position: sticky` | Supported | |
 | Floats | Supported | |
 | Tables (`display: table`) | Supported | |
-| `@media`, `@supports`, `@import` | Supported | |
+| `@media`, `@supports`, `@import` | Supported | including stylesheets imported from packages |
+| Cascade layers (`@layer`), `@property` | Supported | |
 | `box-shadow` | Supported | |
 | `filter` | Supported | native controls inside a filtered element are drawn unfiltered |
 | `backdrop-filter` | Supported | |
@@ -157,7 +168,6 @@ conic gradients draw as linear gradients, and `isPointInPath` and
 | `mask` referencing an SVG `<mask>` element | Partial | does not mask |
 | `display: contents` | Partial | treated as a normal box |
 | `@font-face` | Partial | installed system fonts are used |
-| `@layer` | Partial | layers are flattened in source order |
 | `text-shadow` | Partial | not drawn |
 | `overflow-anchor` | Partial | scroll positions are not adjusted when content above changes |
 | Unknown properties | Partial | ignored |
