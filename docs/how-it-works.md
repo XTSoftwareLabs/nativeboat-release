@@ -5,7 +5,7 @@ it builds has no JavaScript engine in it and doesn't use Chromium or
 WebView2, but it runs the same code and shows the same pages. This page
 explains the idea. It doesn't go into how the pieces are implemented.
 
-## The usual way: ship a browser
+## Typical Electron app
 
 An Electron app is a small program that travels with a very large runtime:
 
@@ -22,7 +22,7 @@ download size by using the browser that comes with Windows, but the work is
 the same. It still happens on the user's machine, every time, inside a
 browser process.
 
-## The NativeBoat way: do the work once, when you build
+## The NativeBoat way
 
 NativeBoat does that work on your machine when you build the app, instead
 of on your users' machines when they run it:
@@ -39,7 +39,7 @@ of on your users' machines when they run it:
 Your users get a regular executable. There's no script left for an engine to
 run and no web page left for a browser to render.
 
-### 1. The code is compiled, not interpreted
+### 1. Compile JavaScript code
 
 A JavaScript engine translates your code while it runs. NativeBoat does the
 translating before the app ever runs, like a C++ or Rust compiler:
@@ -106,17 +106,6 @@ usual DOM events.
 - The same app. You keep your Electron project, your frameworks and your npm
   packages, and run `nativeboat build`.
 
-## What this approach implies
-
-Since the work happens at build time, the compiler has to be able to see the
-code. Code that only appears while the app is running can't be compiled:
-
-- `eval`, `new Function` and scripts downloaded at run time aren't supported.
-- `require()` with a module name that's only known at run time, such as a
-  plugin the user installs later, can't be loaded.
-- If the app uses an API NativeBoat doesn't have yet, the build or the
-  running app tells you so.
-
-`nativeboat analyze` lists what an app uses and how well each part is
+- `nativeboat analyze` lists what an app uses and how well each part is
 supported, before you build anything. Each release also comes with a
 [compatibility list](compatibility.md).
