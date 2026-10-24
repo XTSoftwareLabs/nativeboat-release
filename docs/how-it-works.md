@@ -97,8 +97,7 @@ usual DOM events.
 
 ## What users get
 
-- A small program that stands on its own. Nothing needs to be installed
-  first, WebView2 included.
+- A small program that stands on its own.
 - Fast starts and lower memory use. There's no engine to boot and no browser
   processes running next to the app.
 - No JavaScript to read. The app is machine code like any other native
