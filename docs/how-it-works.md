@@ -3,7 +3,7 @@
 NativeBoat turns an Electron app into a native Windows program. The program
 it builds has no JavaScript engine in it and doesn't use Chromium or
 WebView2, but it runs the same code and shows the same pages. This page
-explains the idea. It doesn't go into how the pieces are implemented.
+explains the idea.
 
 ## Typical Electron app
 
